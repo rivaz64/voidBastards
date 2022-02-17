@@ -1,0 +1,18 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{CE6170E2-44C1-6A05-9F3E-50998C8A5F23}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "voidBastards",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMG",
+				"Engine",
+				"CoreUObject"
+			]
+		}
+	]
+}
