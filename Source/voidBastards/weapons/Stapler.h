@@ -17,11 +17,10 @@ class VOIDBASTARDS_API UStapler : public UFireArm
  public:
 
 	void
-	shot() override;
+	fire() override;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int bulletsPerShot = 6;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float separation = .15;
+	
 };

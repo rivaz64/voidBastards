@@ -14,13 +14,19 @@ class VOIDBASTARDS_API UMyUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
- public:
+  public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool isFire = false;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool isEmpty = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isCharging = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	int charge = 0;
 
 	float timer;
 

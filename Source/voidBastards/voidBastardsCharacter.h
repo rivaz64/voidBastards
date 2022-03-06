@@ -112,6 +112,9 @@ protected:
 	/** Fires a projectile. */
 	void OnFire();
 
+	/** Fires a projectile. */
+	void OnEndFire();
+
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
 
@@ -195,7 +198,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float health = 1;
 
+	bool shooting = false;
 
+	float timer = 0;
 	
 };
 

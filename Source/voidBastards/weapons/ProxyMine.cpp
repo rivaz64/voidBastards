@@ -5,7 +5,7 @@
 #include "../Enemy.h"
 #include "../voidBastardsCharacter.h"
 #include "../damagable.h"
-
+/*
 void
 AProxyMine::enterRange(AActor* actor){
   inRange.Add(actor);
@@ -30,3 +30,4 @@ void AProxyMine::explode(AActor* actor)
   }
   this->Destroy();
 }
+*/

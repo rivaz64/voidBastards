@@ -16,6 +16,9 @@ USteering::USteering()
 	patrolState = new PatrolState;
 	attackState = new AttackingState;
 	chasingState = new ChasingState;
+
+	patrolState->aceptanceRadius = patrolAceptanceRadius;
+	chasingState->aceptanceRadius = chasingAceptanceRadius;
 	// ...
 }
 
@@ -56,17 +59,12 @@ void USteering::move()
 
 	FVector2D desiredVelocity = distance.GetSafeNormal()*maxVelocity;
 
-	float arriveDist = (distance.Size()-aceptanceRadius)/(arrivingRadius-aceptanceRadius);
-
-	if(distance.Size()<aceptanceRadius || arriveDist < .05){
+	if(distance.Size()<actualState->aceptanceRadius ){
 		desiredVelocity *=0;
 		timer+=DeltaTime;
 		actualState->onArrive(this);
 	}
-	else if(distance.Size()<arrivingRadius){
-		desiredVelocity *= arriveDist;
-		timer = 0;
-	}
+
 	else{
 		timer = 0;
 	}
@@ -114,6 +112,7 @@ void ChasingState::onArrive(USteering* actor)
 	auto pawn = Cast<AEnemy>(actor->GetOwner());
 	if(!pawn->vision->seeing){
 		if(actor->timer > actor->waitTime){
+			pawn->anims->setWalkAnim();
 			actor->actualState = actor->patrolState;
 			actor->pointToGo = actor->pointsToGo[actor->acutalPoint];
 		}
@@ -127,6 +126,7 @@ void ChasingState::onArrive(USteering* actor)
 
 void BehaviorState::onUpdate(USteering* actor)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("None"));
 	actor->move();
 }
 
@@ -139,13 +139,14 @@ void BehaviorState::onSeen(USteering* actor)
 
 void AttackingState::onUpdate(USteering* actor)
 {
-	auto pawn = actor->GetOwner();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Attack"));
+
+	auto pawn = Cast<AEnemy>(actor->GetOwner());
 	actor->look();
-	if(actor->timer > actor->waitTime){
+	actor->timer += actor->DeltaTime;
+	if(actor->timer > actor->timerAtack){
+		pawn->anims->setWalkAnim();
 		actor->timer = 0;
-		FTransform trans;
-		trans.SetLocation(pawn->GetActorLocation()+FVector(actor->forward.X*50.f,actor->forward.Y*50.f,0));
-		//auto projectil = actor->GetWorld()->SpawnActor<AActor*>(AProjectile::StaticClass(),trans);
-		
+		actor->actualState = actor->patrolState;
 	}
 }

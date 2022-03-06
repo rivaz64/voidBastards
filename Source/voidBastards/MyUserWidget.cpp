@@ -7,7 +7,7 @@ void UMyUserWidget::fire()
 {
   GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("fire"));
   isFire = true;
-  timer = .1f;
+  timer = .05f;
 }
 
 void UMyUserWidget::update(float deltaTime)

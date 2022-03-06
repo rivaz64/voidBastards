@@ -2,3 +2,15 @@
 
 
 #include "BushWhacker.h"
+
+void
+UBushWhacker::shot(){
+  fire();
+}
+
+void
+UBushWhacker::fire(){
+
+  bulletSpawn(getDirection());
+
+}

@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "damagable.h"
 #include "Vision.h"
+#include "weapons/Throwable.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -120,5 +121,26 @@ void AEnemy::hitted()
 	timer = .1;
 	isHitted = true;
 }
+
+void AEnemy::poisoned()
+{
+	setPoisedMaterial();
+	timer = .1;
+	isHitted = true;
+	
+}
+
+void AEnemy::attack()
+{
+	FTransform trans;
+	auto dir = FVector(steering->forward.X,steering->forward.Y,0);
+	trans.SetLocation(GetActorLocation()+dir*100);
+	auto projectil = GetWorld()->SpawnActor<AActor>(bullet,trans);
+	//Cast<AThrowable>(projectil)->mesh->AddImpulse(dir*1000);
+}
+
+
+
+
 
 

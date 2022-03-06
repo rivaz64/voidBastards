@@ -38,8 +38,15 @@ void UAnimation::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 	auto pawn = Cast<AEnemy>(GetOwner());
 
 	if(timer>secondPerFrame){
-		++actualAnim;
 		auto& actual = *frames;
+		actualAnim = (actualAnim+1)%actual.Num();
+
+		if(actualGroup == &attackAnim){
+		  if(actualAnim == 0){
+				pawn->attack();
+			}
+		}
+		
 		sprite = actual[actualAnim%actual.Num()];
 		pawn->printSprite();
 		timer = 0;

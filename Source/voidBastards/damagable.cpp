@@ -30,6 +30,17 @@ void Udamagable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	timer+=DeltaTime;
+
+	if(timer > venomUpdate){
+		timer = 0;
+		if(venom>0)
+		hitted(venom);
+		
+		//if(venom>0){
+		//	auto 
+		//}
+	}
 	// ...
 }
 
@@ -51,7 +62,18 @@ void Udamagable::hitted(int damage)
 	}
 }
 
-float Udamagable::getVidaPercentage()
+float 
+Udamagable::getVidaPercentage()
 {
 	return static_cast<float>(vida)/static_cast<float>(maxVida);
+}
+
+void 
+Udamagable::poisoned(int poison)
+{
+	venom = poison;
+	auto enemy = Cast<AEnemy>(GetOwner());
+	if(enemy){
+		enemy->onPoised();
+	}
 }

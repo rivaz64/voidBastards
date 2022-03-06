@@ -24,6 +24,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	void
 	hitted(int damage);
 
@@ -33,9 +34,18 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int maxVida;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float venomUpdate = 1.5f;
+
   UFUNCTION(BlueprintCallable)
 	float 
 	getVidaPercentage();
 
+	int venom = 0;
+
+	float timer = 0;
+
+	void
+	poisoned(int poison);
 	
 };

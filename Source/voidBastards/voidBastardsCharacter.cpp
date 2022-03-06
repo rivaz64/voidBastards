@@ -100,17 +100,11 @@ void AvoidBastardsCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	firearm->world = GetWorld();
-
-	firearm->character = this;
-
-	device->world = GetWorld();
-
-	device->character = this;
-
-	indirect->world = GetWorld();
-
-	indirect->character = this;
+	//firearm->character = this;
+	//
+	//device->character = this;
+	//
+	//indirect->character = this;
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
@@ -138,6 +132,12 @@ AvoidBastardsCharacter::Tick(float DeltaTime)
 	if(oxigen<0){
 		die();
 	}
+	if(shooting && actualWeapon){
+
+		actualWeapon->delta = DeltaTime;
+		actualWeapon->shotting();
+		
+	}
 }
 
 
@@ -161,7 +161,7 @@ AvoidBastardsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AvoidBastardsCharacter::OnFire);
-
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AvoidBastardsCharacter::OnEndFire);
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -182,7 +182,11 @@ AvoidBastardsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 void AvoidBastardsCharacter::OnFire()
 {
+	if(actualWeapon)
 	actualWeapon->use();
+
+	shooting = true;
+
 
 
 	// try and fire a projectile
@@ -231,6 +235,14 @@ void AvoidBastardsCharacter::OnFire()
 		}
 	}
 	*/
+}
+
+void AvoidBastardsCharacter::OnEndFire()
+{
+	if(actualWeapon)
+	actualWeapon->stopShotting();
+
+	shooting = false;
 }
 
 void AvoidBastardsCharacter::OnResetVR()
@@ -348,7 +360,9 @@ bool AvoidBastardsCharacter::EnableTouchscreenMovement(class UInputComponent* Pl
 
 void AvoidBastardsCharacter::attachWeapon(UWeapon* weapon)
 {
-	weapon->world = GetWorld();
+	if(!weapon){
+		return;
+	}
 
 	weapon->character = this;
 }

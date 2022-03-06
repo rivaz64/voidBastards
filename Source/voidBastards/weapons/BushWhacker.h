@@ -14,7 +14,15 @@ class VOIDBASTARDS_API UBushWhacker : public UIndirect
 {
 	GENERATED_BODY()
 	
-	public:
+ public:
 
+	void
+	shot() override;
+
+	void
+	empty() override {}
+
+	void
+	fire() override;
 	
 };

@@ -14,4 +14,9 @@ class VOIDBASTARDS_API AJanitor : public AEnemy
 {
 	GENERATED_BODY()
 	
+	/*void 
+	attack() override;*/
+
+	void
+	attackUpdate() override;
 };

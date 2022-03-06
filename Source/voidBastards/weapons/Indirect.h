@@ -16,13 +16,4 @@ class VOIDBASTARDS_API UIndirect : public UWeapon
 	GENERATED_BODY()
 	
  public:
-
-	UPROPERTY(BlueprintReadWrite,EditAnywhere)
-	TSubclassOf<AActor> throwable;
-
-	UPROPERTY(BlueprintReadWrite,EditAnywhere)
-	float impulse;
-
-	void 
-	shot() override;
 };

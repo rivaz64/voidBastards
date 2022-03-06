@@ -21,10 +21,31 @@ public:
 	use();
 
 	virtual void
-	shot() {}
+	shot();
 
 	virtual void
-	empty(){}
+	shotting() {}
+
+	virtual void
+	stopShotting(){}
+
+	virtual void
+	empty();
+
+	virtual void
+	fire(){}
+
+	virtual bool
+	damageEnemy(const FHitResult& result);
+
+	void
+	bulletTrace(FVector dir, float distance);
+
+	void
+	bulletSpawn(FVector dir);
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	TSubclassOf<AActor> throwable;
 
 	FVector
 	getLocation();
@@ -38,11 +59,7 @@ public:
 	FVector
 	getDirectionUp();
 
-	UWorld* world;
-
 	ACharacter* character;
-
-	
  
   UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TArray<int> bulletDamages;
@@ -54,5 +71,24 @@ public:
 	TArray<UObject*> readySprites;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<UObject*> fireSprites;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<UObject*> emptySprites;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int level = 0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float separation = .15;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<TSubclassOf<AActor>> marks;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float impulse = 1000;
+
+	float timer = 0;
+
+	float delta;
 };

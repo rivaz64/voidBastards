@@ -10,6 +10,10 @@
 
 class UPart;
 class UWeapon;
+class UFireArm;
+class UIndirect;
+class UDevice;
+
 /**
  * 
  */
@@ -40,7 +44,13 @@ class VOIDBASTARDS_API UInventory : public UGameInstanceSubsystem
 	TArray<UWeapon*> weapons;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UWeapon* fireArm;
+	UFireArm* fireArm;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UIndirect* indirect;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UDevice* device;
 
 	std::map<FString,std::vector<std::pair<int,int>>> prices;
 

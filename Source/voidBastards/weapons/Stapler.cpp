@@ -4,7 +4,7 @@
 #include "Stapler.h"
 
 void
-UStapler::shot(){
+UStapler::fire(){
   
   auto front = getDirection();
   auto right = getDirectionRight();
@@ -19,4 +19,5 @@ UStapler::shot(){
     auto dir = front+right*x+up*y;
     bulletTrace(dir,750);
   }
+
 }

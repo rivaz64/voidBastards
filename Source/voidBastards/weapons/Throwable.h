@@ -23,6 +23,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void 
+	explote();
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float radius = 500;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float damage = 3;
+
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	UStaticMeshComponent* mesh;
 

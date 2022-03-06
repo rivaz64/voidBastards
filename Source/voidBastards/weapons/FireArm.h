@@ -16,24 +16,5 @@ class VOIDBASTARDS_API UFireArm : public UWeapon
 
  public:
 
-	void
-	shot() override;
 	
-	virtual void
-	fire(){}
-
-	void
-	bulletTrace(FVector dir, float distance);
-
-	void
-	empty() override;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TArray<UObject*> fireSprites;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TArray<UObject*> emptySprites;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TArray<TSubclassOf<AActor>> marks;
 };

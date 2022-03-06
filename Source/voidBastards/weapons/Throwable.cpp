@@ -2,6 +2,9 @@
 
 
 #include "Throwable.h"
+#include "Kismet/GameplayStatics.h"
+#include "../Enemy.h"
+#include "../damagable.h"
 
 // Sets default values
 AThrowable::AThrowable()
@@ -25,5 +28,18 @@ void AThrowable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AThrowable::explote()
+{
+	TArray<AActor*> found;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AEnemy::StaticClass(),found);
+	for(AActor* actor : found){
+		auto enemy = Cast<AEnemy>(actor);
+		if(FVector::Dist(GetActorLocation(),enemy->GetActorLocation())<radius){
+			enemy->damagable->hitted(damage);
+		}
+	}
+	this->Destroy();
 }
 

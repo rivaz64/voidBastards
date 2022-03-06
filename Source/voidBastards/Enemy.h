@@ -43,6 +43,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
   void 
+	setPoisedMaterial();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+  void 
 	setSpriteFront();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -77,16 +81,28 @@ public:
 	void
 	printSprite();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void
+	onPoised();
+
 	void 
 	die();
 
 	void
 	hitted();
 
+	void
+	poisoned();
+
   UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void
 	setSpriteRotation(float angle);
 
+	void 
+	attack();
+
+	virtual void
+	attackUpdate() {}
 
 	float timer = 0;
 
@@ -115,5 +131,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UVision* vision;
 	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TSubclassOf<AActor> bullet;
 
 };

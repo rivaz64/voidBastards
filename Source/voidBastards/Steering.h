@@ -43,10 +43,13 @@ public:
 	float maxAceleration = 100;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float aceptanceRadius = 50;
+	float patrolAceptanceRadius = 50;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float arrivingRadius = 100;
+	float chasingAceptanceRadius = 300;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float timerAtack = 3;
 
 	FVector2D location;
 
@@ -76,6 +79,11 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float waitTime = 2;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float attackTime = .5;
+
+	
+
 	BehaviorState* actualState;
 	PatrolState* patrolState;
 	AttackingState* attackState;
@@ -88,17 +96,21 @@ class BehaviorState{
   virtual void onArrive(USteering* actor){}
 	virtual void onUpdate(USteering* actor);
 	virtual void onSeen(USteering* actor);
+
+	float aceptanceRadius;
 };
 
 class PatrolState: public BehaviorState{
-	void onArrive(USteering* actor);
+	void onArrive(USteering* actor)override;
 };
 
 class ChasingState: public BehaviorState{
-  void onArrive(USteering* actor);
+  void onArrive(USteering* actor)override;
 };
 
 class AttackingState: public BehaviorState{
-  void onUpdate(USteering* actor);
-	void onSeen(USteering* actor){}
+  void onUpdate(USteering* actor)override;
+	void onSeen(USteering* actor)override{}
+	int attacks = 3;
+	int actualAttacks = 0;
 };
