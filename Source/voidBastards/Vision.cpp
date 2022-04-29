@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "damagable.h"
 #include "Kismet/GameplayStatics.h"
+#include "voidBastardsCharacter.h"
 
 // Sets default values for this component's properties
 UVision::UVision()
@@ -32,6 +33,12 @@ void UVision::BeginPlay()
 void UVision::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	return;
+	time += DeltaTime;
+
+	if(time<timer) return;
+
+	time =0;
 
 	seeing = false;
 
@@ -51,13 +58,12 @@ void UVision::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),APawn::StaticClass(),found);
 
 	for(auto other : found){
-		if(other==pawn) continue;
+		if(other==pawn || !Cast<AvoidBastardsCharacter>(other)) continue;
 		auto otherLocation = FVector2D(other->GetActorLocation().X,other->GetActorLocation().Y);
 		auto dif = otherLocation-location;
 		auto difSize = dif.Size();
 		if(difSize<near || difSize<distance && FVector2D::DotProduct(dif.GetSafeNormal(),steering->forward)>angle){
-			steering->pointToGo = otherLocation;
-			steering->actualState->onSeen(steering);
+			steering->actualState->onSeen(steering,otherLocation);
 			seeing = true;
 		}
 	}

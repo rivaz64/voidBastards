@@ -2,6 +2,8 @@
 
 
 #include "explotion.h"
+#include "Kismet/GameplayStatics.h"
+#include "damagable.h"
 
 // Sets default values
 Aexplotion::Aexplotion()
@@ -15,7 +17,14 @@ Aexplotion::Aexplotion()
 void Aexplotion::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TArray<AActor*> found;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AActor::StaticClass(),found);
+	for(AActor* actor : found){
+		auto component = actor->GetComponentByClass(Udamagable::StaticClass());
+		if(component&&FVector::Dist(GetActorLocation(),actor->GetActorLocation())<radius){
+			Cast<Udamagable>(component)->hitted(damage);
+		}
+	}
 }
 
 // Called every frame

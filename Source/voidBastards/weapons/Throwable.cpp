@@ -33,11 +33,12 @@ void AThrowable::Tick(float DeltaTime)
 void AThrowable::explote()
 {
 	TArray<AActor*> found;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AEnemy::StaticClass(),found);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AActor::StaticClass(),found);
 	for(AActor* actor : found){
-		auto enemy = Cast<AEnemy>(actor);
-		if(FVector::Dist(GetActorLocation(),enemy->GetActorLocation())<radius){
-			enemy->damagable->hitted(damage);
+		if(actor == ThrowedBy) continue;
+		auto component = actor->GetComponentByClass(Udamagable::StaticClass());
+		if(component&&FVector::Dist(GetActorLocation(),actor->GetActorLocation())<radius){
+			Cast<Udamagable>(component)->hitted(damage);
 		}
 	}
 	this->Destroy();

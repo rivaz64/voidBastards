@@ -20,7 +20,7 @@ USpiker::damageEnemy(const FHitResult& result){
  
   if(enemy){
     
-    enemy->damagable->poisoned(poisonDamage);
+    Cast<Udamagable>(enemy->GetComponentByClass(Udamagable::StaticClass()))->poisoned(poisonDamage);
     return true;
   }
   return false;

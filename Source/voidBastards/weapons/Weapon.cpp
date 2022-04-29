@@ -73,7 +73,8 @@ UWeapon::damageEnemy(const FHitResult& result){
     if(atitude.Z>70){
       multiplier=2;
     }
-    enemy->damagable->hitted(bulletDamages[level]* multiplier);
+    if(bulletDamages.Num()>0)
+    Cast<Udamagable>(enemy->GetComponentByClass(Udamagable::StaticClass()))->hitted(bulletDamages[level]* multiplier);
     return true;
   }
   return false;
@@ -115,6 +116,7 @@ UWeapon::bulletTrace(FVector dir, float distance)
   FTransform trans;
   trans.SetLocation(impact+ result.ImpactNormal);
   trans.SetRotation(Quat);
+  if(marks.Num()>0)
   GetWorld()->SpawnActor<AActor>(marks[FMath::Rand()%marks.Num()],trans);
 }
 

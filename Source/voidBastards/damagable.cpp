@@ -36,7 +36,9 @@ void Udamagable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 		timer = 0;
 		if(venom>0)
 		hitted(venom);
-		
+		if(radiationPercentage>0){
+			hitted(radiationPercentage*radiationDamage);
+		}
 		//if(venom>0){
 		//	auto 
 		//}
@@ -76,4 +78,10 @@ Udamagable::poisoned(int poison)
 	if(enemy){
 		enemy->onPoised();
 	}
+}
+
+void 
+Udamagable::radiated()
+{
+	radiationPercentage+=.01;
 }

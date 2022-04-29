@@ -20,8 +20,13 @@ class UDevice;
 
 enum VB_PIEZAS{
 P_METAL_TUBE = 0,
-P_STIMULATOR
+P_STIMULATOR,
+P_FTL,
+P_PLATE,
+P_RIVET,
+P_PNEUMA
 };
+
 UCLASS()
 class VOIDBASTARDS_API UInventory : public UGameInstanceSubsystem
 {
@@ -41,7 +46,7 @@ class VOIDBASTARDS_API UInventory : public UGameInstanceSubsystem
 	TMap<FString,bool> afordances;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TArray<UWeapon*> weapons;
+	TMap<FString,UWeapon*> weapons;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UFireArm* fireArm;
@@ -65,7 +70,6 @@ class VOIDBASTARDS_API UInventory : public UGameInstanceSubsystem
 	UFUNCTION( BlueprintCallable)
 	void
 	buy(FString name);
-
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool dirty = false;

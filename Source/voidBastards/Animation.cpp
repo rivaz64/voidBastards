@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Enemy.h"
 #include "Steering.h"
+#include "GameFramework/CharacterMovementComponent.h"
 // Sets default values for this component's properties
 UAnimation::UAnimation()
 {
@@ -24,6 +25,7 @@ void UAnimation::BeginPlay()
 
 	// ;
 	setIdleAnim();
+	return;
 	frames = &idleAnim[0].frames;
 }
 
@@ -32,7 +34,7 @@ void UAnimation::BeginPlay()
 void UAnimation::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	//return;
 	timer += DeltaTime;
 
 	auto pawn = Cast<AEnemy>(GetOwner());
@@ -88,18 +90,26 @@ void UAnimation::setAttackAnim()
 	actualGroup = &attackAnim;
 }
 
+void UAnimation::setEnrageAnim()
+{
+	if(enrageAnim.Num()!=0)
+	actualGroup = &enrageAnim;
+}
+
 void 
 UAnimation::setDirection(const FVector2D& dir)
 {
 	//if(actualGroup == &walkAnim) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("walking"));
 	//if(actualGroup == &idleAnim) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("idleing"));
-
+	//return;
 	auto& actual = *actualGroup;
 	auto pawn = Cast<AEnemy>(GetOwner());
-	if(!pawn->steering) return;
-	float right = FVector2D::DotProduct(dir,pawn->steering->right);
-	float forward = FVector2D::DotProduct(dir,pawn->steering->forward);
-	//if(!actual.size) return;
+	//UMovement
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Some variable values: x: %f, y: %f"), pawn->front.X,-pawn->front.Y));
+	auto r = FVector2D(pawn->front.Y,-pawn->front.X);
+	float right = FVector2D::DotProduct(dir,r);
+	float forward = FVector2D::DotProduct(dir,pawn->front);
+	////if(!actual.size) return;
 	if(abs(right)>0.92387953251 || abs(forward)>0.92387953251){
 		if(abs(right)>abs(forward)){
 			frames = &actual[2].frames;
@@ -135,9 +145,7 @@ void IdleAnim::onUpdate(UAnimation* anim)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Idle"));
 	auto pawn = Cast<AEnemy>(anim->GetOwner());
-	auto steering = pawn->steering;
-
-	if(steering->velocity.Size()>1){
+	if(pawn->GetVelocity().Size()>1){
 		anim->setWalkAnim();
 	}
 }
@@ -147,9 +155,8 @@ void WalkAnim::onUpdate(UAnimation* anim)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
 	auto pawn = Cast<AEnemy>(anim->GetOwner());
-	auto steering = pawn->steering;
 
-	if(steering->velocity.Size()<1){
+	if(pawn->GetVelocity().Size()<1){
 		anim->setIdleAnim();
 	}
 }

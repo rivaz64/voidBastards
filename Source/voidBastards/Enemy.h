@@ -11,7 +11,9 @@ class USteering;
 class UAnimation;
 class Udamagable;
 class UVision;
-
+class AttackType;
+class DieType;
+class AfterShoot;
 
 UCLASS()
 class VOIDBASTARDS_API AEnemy : public ACharacter
@@ -98,6 +100,10 @@ public:
 	void
 	setSpriteRotation(float angle);
 
+	UFUNCTION(BlueprintCallable)
+	void
+	onSeen();
+
 	void 
 	attack();
 
@@ -119,19 +125,94 @@ public:
 	//UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	//UObject* sprite;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UAnimation* anims;
+	//UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	//UAnimation* anims;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	USteering* steering;
+	//UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	//USteering* steering;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	Udamagable* damagable;
+	//UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	//Udamagable* damagable;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UVision* vision;
+	//UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	//UVision* vision;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TSubclassOf<AActor> bullet;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool destroyOnDie = true;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int attackType=0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int dieType=0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int reactType=0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float distanceToFlee=1000;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float attackImpulse=1000;
+
+	AttackType* attacker; 
+
+	DieType* dier;
+
+	AfterShoot* reactor;
+
+	FVector2D front = FVector2D(1.0f,0.0f);
+};
+
+class AttackType{
+	public:
+	virtual void attack(AEnemy*){}
+};
+
+class AttackShoot : public AttackType{
+	public:
+	void attack(AEnemy*) override;
+	int shoots = 0;
+};
+
+class AttackSuicide : public AttackType{
+	public:
+	void attack(AEnemy*) override;
+};
+
+class AttackEscape : public AttackType{
+	public:
+	void attack(AEnemy*) override;
+};
+
+class DieType{
+	public:
+	virtual void die(AEnemy*){}
+	virtual void destroy(AEnemy*){}
+};
+
+class DieNormal : public DieType{
+	public:
+	void die(AEnemy*) override;
+	void destroy(AEnemy*) override;
+};
+
+class DieExplode : public DieType{
+	public:
+  void die(AEnemy*) override;
+
+	void destroy(AEnemy*) override;
+};
+
+class AfterShoot{
+ public:
+  virtual void react(AEnemy*){}
+};
+
+class Flee : public AfterShoot{
+ public:
+  virtual void react(AEnemy*);
 };

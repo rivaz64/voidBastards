@@ -9,11 +9,33 @@ UInventory::UInventory(){
 	{FString("heavyRegulator"),{
 	{P_METAL_TUBE,1},}
 	},
-
+	
 	{FString("Fastwhaker"),{
 	{P_METAL_TUBE,1},
 	{P_STIMULATOR,1},}
-	}
+	},
+
+	{FString("stamper"),{
+	{P_FTL,1}}
+	},
+
+	{FString("toaster"),{
+	{P_FTL,2},
+	{P_PLATE,1}}
+	},
+
+	{FString("riveter"),{
+	{P_FTL,3},
+	{P_PLATE,2},
+	{P_RIVET,1}}
+	},
+
+	{FString("nebulator"),{
+	{P_FTL,4},
+	{P_PLATE,3},
+	{P_RIVET,2},
+	{P_PNEUMA,1}}
+	},
 
 	};
 	afordances.Add(FString("heavyRegulator"),false);

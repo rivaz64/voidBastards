@@ -72,6 +72,11 @@ protected:
 	void 
 	die();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void exitLevel();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void update();
 
 public:
 
@@ -119,9 +124,11 @@ protected:
 	void OnResetVR();
 
 	/** Handles moving forward/backward */
+	
 	void MoveForward(float Val);
 
 	/** Handles stafing movement, left and right */
+	
 	void MoveRight(float Val);
 
 	/**
@@ -136,6 +143,7 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+
 	
 
 	struct TouchData
@@ -149,6 +157,12 @@ protected:
 	void BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void onUse(FHitResult result);
+
+	void use();
+
 	TouchData	TouchItem;
 	
 protected:
@@ -163,6 +177,11 @@ protected:
 	 * @returns true if touch controls were enabled.
 	 */
 	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
+
+	UFUNCTION()
+	void
+	MyDestroyed(AActor* Act);
+	
 
 public:
 	/** Returns Mesh1P subobject **/
@@ -198,9 +217,26 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float health = 1;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float collicionDistance;
+
 	bool shooting = false;
 
 	float timer = 0;
+
+	float deadTimer;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool isDead;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float velocity;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float jumpVel;
+
+	friend class ACharacter;
+	
 	
 };
 

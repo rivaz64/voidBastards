@@ -33,6 +33,11 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float angle = .5;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float timer=.5f;
+
+	float time;
+
 	bool seeing;
 		
 };

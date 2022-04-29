@@ -28,6 +28,17 @@ public:
 	void
 	hitted(int damage);
 
+	void
+	poisoned(int poison);
+
+	UFUNCTION(BlueprintCallable)
+	void
+	radiated();
+
+	UFUNCTION(BlueprintCallable)
+	float 
+	getVidaPercentage();
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int vida;
 
@@ -37,15 +48,15 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float venomUpdate = 1.5f;
 
-  UFUNCTION(BlueprintCallable)
-	float 
-	getVidaPercentage();
-
 	int venom = 0;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float radiationDamage=36;
+
+	float radiationPercentage=0;
 
 	float timer = 0;
 
-	void
-	poisoned(int poison);
+	
 	
 };

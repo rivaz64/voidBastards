@@ -10,6 +10,7 @@ class BehaviorState;
 class PatrolState;
 class AttackingState;
 class ChasingState;
+class FleeingState;
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VOIDBASTARDS_API USteering : public UActorComponent
 {
@@ -82,12 +83,13 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float attackTime = .5;
 
-	
+	FVector2D memory;
 
 	BehaviorState* actualState;
 	PatrolState* patrolState;
 	AttackingState* attackState;
 	ChasingState* chasingState;
+	FleeingState* fleeState;
 };
 
 
@@ -95,7 +97,7 @@ class BehaviorState{
  public:
   virtual void onArrive(USteering* actor){}
 	virtual void onUpdate(USteering* actor);
-	virtual void onSeen(USteering* actor);
+	virtual void onSeen(USteering* actor,const FVector2D& position);
 
 	float aceptanceRadius;
 };
@@ -110,7 +112,12 @@ class ChasingState: public BehaviorState{
 
 class AttackingState: public BehaviorState{
   void onUpdate(USteering* actor)override;
-	void onSeen(USteering* actor)override{}
+	void onSeen(USteering* actor,const FVector2D& position)override{}
 	int attacks = 3;
 	int actualAttacks = 0;
+};
+
+class FleeingState: public BehaviorState{
+	void onSeen(USteering* actor,const FVector2D& position)override{}
+	void onArrive(USteering* actor)override;
 };

@@ -14,8 +14,13 @@
 #include "weapons/Device.h"
 #include "weapons/BushWhacker.h"
 #include "damagable.h"
-#include"Part.h"
+#include "Part.h"
+#include "ExitDoor.h"
+#include "MyCharacterMovementComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "GameFramework/CharacterMovementComponent.h"
+#include "VisualCollicion.h"
+#include "DrawDebugHelpers.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -26,6 +31,8 @@ AvoidBastardsCharacter::AvoidBastardsCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	//GetMovementComponent
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -93,12 +100,28 @@ AvoidBastardsCharacter::AvoidBastardsCharacter()
 	//bUsingMotionControllers = true;
 
 	damagable = CreateDefaultSubobject<Udamagable>(TEXT("damagable"));
+
+	OnDestroyed.AddDynamic(this, &AvoidBastardsCharacter::MyDestroyed);
 }
 
 void AvoidBastardsCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	oxigen = 60;
+	maxOxigen = 60;
+	//size_t id = (size_t)GetMovementComponent();
+	//
+	//size_t* scaner = (size_t*)this;
+	//
+	//while(true){
+  //  if(id==*scaner){
+  //    break;
+  //  }
+  //  ++scaner;
+  //}
+	//auto comp = new UMyCharacterMovementComponent;
+  //*scaner = (size_t)();
 
 	//firearm->character = this;
 	//
@@ -125,19 +148,53 @@ void AvoidBastardsCharacter::BeginPlay()
 void 
 AvoidBastardsCharacter::Tick(float DeltaTime)
 {
+	update();
+	
+		///GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f"),  FVector::Distance(GetActorLocation(),result.ImpactPoint)));
+
+	
 	oxigen-=DeltaTime;
 	if(health > damagable->getVidaPercentage()){
 		health -= DeltaTime*.125f;
 	}
+
 	if(oxigen<0){
 		die();
 	}
-	if(shooting && actualWeapon){
 
+	if(shooting && actualWeapon){
 		actualWeapon->delta = DeltaTime;
 		actualWeapon->shotting();
 		
 	}
+
+	if(isDead){
+		deadTimer += DeltaTime;
+		if(deadTimer>1){
+			UGameplayStatics::OpenLevel(GetWorld(),"workbench");
+		}
+	}
+	
+	//GetMovementComponent()->Velocity =  FVector::ZeroVector;
+	//CharacterMovement;
+
+	
+	//if(upVel<0){
+	//	upVel = 0;
+	//}
+	
+
+	
+
+
+	
+
+	//auto castComp = Cast<UMyCharacterMovementComponent>(comp);
+	//
+	//if(castComp)
+	
+	
+	
 }
 
 
@@ -162,6 +219,8 @@ AvoidBastardsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AvoidBastardsCharacter::OnFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AvoidBastardsCharacter::OnEndFire);
+
+	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AvoidBastardsCharacter::use);
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -187,7 +246,7 @@ void AvoidBastardsCharacter::OnFire()
 
 	shooting = true;
 
-
+	
 
 	// try and fire a projectile
 	/*
@@ -275,6 +334,23 @@ void AvoidBastardsCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const
 	TouchItem.bIsPressed = false;
 }
 
+void AvoidBastardsCharacter::use()
+{
+	auto dir = UGameplayStatics::GetPlayerCameraManager(GetWorld(),0)->GetActorForwardVector();
+	auto start = UGameplayStatics::GetPlayerCameraManager(GetWorld(),0)->GetCameraLocation();
+  auto end = start + dir*1000.f;
+  FHitResult result;
+  GetWorld()->LineTraceSingleByChannel(result,start,end,ECollisionChannel::ECC_Visibility);
+	DrawDebugLine(GetWorld(), start, result.ImpactPoint, FColor::Emerald, true, -1, 0, 10);
+
+	onUse(result);
+	//auto actor = Cast<AExitDoor>(result.GetActor());
+	//if(actor){
+	//	exitLevel();
+	//	UGameplayStatics::OpenLevel(GetWorld(),"workbench");
+	//}
+}
+
 //Commenting this section out to be consistent with FPS BP template.
 //This allows the user to turn without using the right virtual joystick
 
@@ -318,6 +394,11 @@ void AvoidBastardsCharacter::MoveForward(float Value)
 	if (Value != 0.0f)
 	{
 		// add movement in that direction
+		//auto col = Cast<UVisualCollicion>(GetComponentByClass(UVisualCollicion::StaticClass()));
+		//float dotCollicion = FVector::DotProduct(col->collidingVector,GetActorForwardVector()*Value);
+		//
+		//if(!col->isColliding || dotCollicion <=0)
+		//AddActorWorldOffset(GetActorForwardVector()*Value*velocity,true);
 		AddMovementInput(GetActorForwardVector(), Value);
 	}
 }
@@ -327,9 +408,14 @@ void AvoidBastardsCharacter::MoveRight(float Value)
 	if (Value != 0.0f)
 	{
 		// add movement in that direction
+		//auto col = Cast<UVisualCollicion>(GetComponentByClass(UVisualCollicion::StaticClass()));
+		//float dotCollicion = FVector::DotProduct(col->collidingVector,GetActorRightVector()*Value);
+		//if(!col->isColliding  || dotCollicion<=0)
+		//AddActorWorldOffset(GetActorRightVector()*Value*velocity,true);
 		AddMovementInput(GetActorRightVector(), Value);
 	}
 }
+
 
 void AvoidBastardsCharacter::TurnAtRate(float Rate)
 {
@@ -358,11 +444,17 @@ bool AvoidBastardsCharacter::EnableTouchscreenMovement(class UInputComponent* Pl
 	return false;
 }
 
+void 
+AvoidBastardsCharacter::MyDestroyed(AActor* Act)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Destoyed"));
+}
+
 void AvoidBastardsCharacter::attachWeapon(UWeapon* weapon)
 {
-	if(!weapon){
-		return;
-	}
-
-	weapon->character = this;
+	//if(!weapon){
+	//	return;
+	//}
+	//
+	//weapon->character = this;
 }

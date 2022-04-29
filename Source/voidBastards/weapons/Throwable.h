@@ -23,6 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	UFUNCTION(BlueprintCallable)
 	virtual void 
 	explote();
@@ -33,7 +34,14 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	float damage = 3;
 
+	//float timePassed;
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float timeToExplode;
+
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	UStaticMeshComponent* mesh;
+
+	UPROPERTY(BlueprintReadWrite)
+	AActor* ThrowedBy;
 
 };

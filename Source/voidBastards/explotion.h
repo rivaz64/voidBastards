@@ -19,8 +19,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+	// Called when the game starts or when spawned
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float radius = 500;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	float damage = 3;
 
 };

@@ -60,6 +60,9 @@ public:
 	setAttackAnim();
 
 	void
+	setEnrageAnim();
+
+	void
 	setDirection(const FVector2D& dir);
 
 	protected:
@@ -77,6 +80,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TArray<FAnim> attackAnim;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<FAnim> enrageAnim;
 	
 	TArray<FAnim>* actualGroup;
 
